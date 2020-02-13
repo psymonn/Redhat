@@ -1,0 +1,28 @@
+How to remove virtual bridge network that is not part of the physical adaptor:
+e.g ifconfig -a ; it will show virbr0-nic and virbr0 with allocated ip address.
+https://linuxcluster.wordpress.com/2019/06/02/remove-virbr0-interfaces-from-centos-7/
+
+Problem:
+The virtual bridge stop me from pinging my gateway and other network
+
+Solution:
+disable service:
+systemctl disable libvirtd.service
+
+show the virtual bride network:
+brctl show
+
+shutdown the network:
+ip link set virbr0 down
+
+remove the virtual bridge network:
+brctl delbr virbr0
+
+Now show nothing:
+brtcl show
+
+----------------------------------
+
+other reference:
+cat /etc/sysconfig/network-scripts/ifcfg-eth0 
+route -n
