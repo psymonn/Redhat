@@ -1,0 +1,520 @@
+login as: root
+root@172.17.5.161's password:
+Last login: Mon Jan 27 23:45:26 2020 from 172.17.5.111
+[root@oracle ~]# lsblk
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda      8:0    0   30G  0 disk
+├─sda1   8:1    0  300M  0 part /boot
+├─sda2   8:2    0    2G  0 part [SWAP]
+└─sda3   8:3    0 17.7G  0 part /
+sr0     11:0    1 1024M  0 rom
+[root@oracle ~]# fdisk -l
+
+Disk /dev/sda: 32.2 GB, 32212254720 bytes, 62914560 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk label type: dos
+Disk identifier: 0x00012701
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sda1   *        2048      616447      307200   83  Linux
+/dev/sda2          616448     4810751     2097152   82  Linux swap / Solaris
+/dev/sda3         4810752    41943039    18566144   83  Linux
+[root@oracle ~]# fdisk /dev/sda
+Welcome to fdisk (util-linux 2.23.2).
+
+Changes will remain in memory only, until you decide to write them.
+Be careful before using the write command.
+
+
+Command (m for help): m
+Command action
+   a   toggle a bootable flag
+   b   edit bsd disklabel
+   c   toggle the dos compatibility flag
+   d   delete a partition
+   g   create a new empty GPT partition table
+   G   create an IRIX (SGI) partition table
+   l   list known partition types
+   m   print this menu
+   n   add a new partition
+   o   create a new empty DOS partition table
+   p   print the partition table
+   q   quit without saving changes
+   s   create a new empty Sun disklabel
+   t   change a partition's system id
+   u   change display/entry units
+   v   verify the partition table
+   w   write table to disk and exit
+   x   extra functionality (experts only)
+
+Command (m for help): n
+Partition type:
+   p   primary (3 primary, 0 extended, 1 free)
+   e   extended
+Select (default e): p
+Selected partition 4
+First sector (41943040-62914559, default 41943040):
+Using default value 41943040
+Last sector, +sectors or +size{K,M,G} (41943040-62914559, default 62914559):
+Using default value 62914559
+Partition 4 of type Linux and of size 10 GiB is set
+
+Command (m for help): t
+Partition number (1-4, default 4):
+Hex code (type L to list all codes): l
+
+ 0  Empty           24  NEC DOS         81  Minix / old Lin bf  Solaris
+ 1  FAT12           27  Hidden NTFS Win 82  Linux swap / So c1  DRDOS/sec (FAT-
+ 2  XENIX root      39  Plan 9          83  Linux           c4  DRDOS/sec (FAT-
+ 3  XENIX usr       3c  PartitionMagic  84  OS/2 hidden C:  c6  DRDOS/sec (FAT-
+ 4  FAT16 <32M      40  Venix 80286     85  Linux extended  c7  Syrinx
+ 5  Extended        41  PPC PReP Boot   86  NTFS volume set da  Non-FS data
+ 6  FAT16           42  SFS             87  NTFS volume set db  CP/M / CTOS / .
+ 7  HPFS/NTFS/exFAT 4d  QNX4.x          88  Linux plaintext de  Dell Utility
+ 8  AIX             4e  QNX4.x 2nd part 8e  Linux LVM       df  BootIt
+ 9  AIX bootable    4f  QNX4.x 3rd part 93  Amoeba          e1  DOS access
+ a  OS/2 Boot Manag 50  OnTrack DM      94  Amoeba BBT      e3  DOS R/O
+ b  W95 FAT32       51  OnTrack DM6 Aux 9f  BSD/OS          e4  SpeedStor
+ c  W95 FAT32 (LBA) 52  CP/M            a0  IBM Thinkpad hi eb  BeOS fs
+ e  W95 FAT16 (LBA) 53  OnTrack DM6 Aux a5  FreeBSD         ee  GPT
+ f  W95 Ext'd (LBA) 54  OnTrackDM6      a6  OpenBSD         ef  EFI (FAT-12/16/
+10  OPUS            55  EZ-Drive        a7  NeXTSTEP        f0  Linux/PA-RISC b
+11  Hidden FAT12    56  Golden Bow      a8  Darwin UFS      f1  SpeedStor
+12  Compaq diagnost 5c  Priam Edisk     a9  NetBSD          f4  SpeedStor
+14  Hidden FAT16 <3 61  SpeedStor       ab  Darwin boot     f2  DOS secondary
+16  Hidden FAT16    63  GNU HURD or Sys af  HFS / HFS+      fb  VMware VMFS
+17  Hidden HPFS/NTF 64  Novell Netware  b7  BSDI fs         fc  VMware VMKCORE
+18  AST SmartSleep  65  Novell Netware  b8  BSDI swap       fd  Linux raid auto
+1b  Hidden W95 FAT3 70  DiskSecure Mult bb  Boot Wizard hid fe  LANstep
+1c  Hidden W95 FAT3 75  PC/IX           be  Solaris boot    ff  BBT
+1e  Hidden W95 FAT1 80  Old Minix
+Hex code (type L to list all codes): 8e
+Changed type of partition 'Linux' to 'Linux LVM'
+
+Command (m for help): w
+The partition table has been altered!
+
+Calling ioctl() to re-read partition table.
+
+WARNING: Re-reading the partition table failed with error 16: Device or resource busy.
+The kernel still uses the old table. The new table will be used at
+the next reboot or after you run partprobe(8) or kpartx(8)
+Syncing disks.
+[root@oracle ~]# lsblk
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda      8:0    0   30G  0 disk
+├─sda1   8:1    0  300M  0 part /boot
+├─sda2   8:2    0    2G  0 part [SWAP]
+└─sda3   8:3    0 17.7G  0 part /
+sr0     11:0    1 1024M  0 rom
+[root@oracle ~]# fdisk -l
+
+Disk /dev/sda: 32.2 GB, 32212254720 bytes, 62914560 sectors
+Units = sectors of 1 * 512 = 512 bytes
+Sector size (logical/physical): 512 bytes / 512 bytes
+I/O size (minimum/optimal): 512 bytes / 512 bytes
+Disk label type: dos
+Disk identifier: 0x00012701
+
+   Device Boot      Start         End      Blocks   Id  System
+/dev/sda1   *        2048      616447      307200   83  Linux
+/dev/sda2          616448     4810751     2097152   82  Linux swap / Solaris
+/dev/sda3         4810752    41943039    18566144   83  Linux
+/dev/sda4        41943040    62914559    10485760   8e  Linux LVM
+[root@oracle ~]# reboot
+
+---------------------------------
+
+login as: root
+root@172.17.5.161's password:
+Last login: Tue Jan 28 00:23:19 2020 from 172.17.5.111
+[root@oracle ~]# lsblk
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda      8:0    0   30G  0 disk
+├─sda1   8:1    0  300M  0 part /boot
+├─sda2   8:2    0    2G  0 part [SWAP]
+├─sda3   8:3    0 17.7G  0 part /
+└─sda4   8:4    0   10G  0 part
+sr0     11:0    1 1024M  0 rom
+[root@oracle ~]# pvcreate /dev/sda4
+  Physical volume "/dev/sda4" successfully created.
+[root@oracle ~]# vgdisplay
+[root@oracle ~]# lsblk
+NAME   MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda      8:0    0   30G  0 disk
+├─sda1   8:1    0  300M  0 part /boot
+├─sda2   8:2    0    2G  0 part [SWAP]
+├─sda3   8:3    0 17.7G  0 part /
+└─sda4   8:4    0   10G  0 part
+sr0     11:0    1 1024M  0 rom
+[root@oracle ~]# vgcreate vg1 /dev/sda4
+  Volume group "vg1" successfully created
+[root@oracle ~]# lvdisplay
+[root@oracle ~]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda3        18G   18G  1.9M 100% /
+devtmpfs        3.8G     0  3.8G   0% /dev
+tmpfs           3.9G   12K  3.9G   1% /dev/shm
+tmpfs           3.9G   13M  3.8G   1% /run
+tmpfs           3.9G     0  3.9G   0% /sys/fs/cgroup
+/dev/sda1       297M  133M  165M  45% /boot
+tmpfs           781M  8.0K  781M   1% /run/user/1004
+tmpfs           781M  8.0K  781M   1% /run/user/42
+tmpfs           781M     0  781M   0% /run/user/0
+[root@oracle ~]# lvcreate -L +3G -n lvl vg1
+  Logical volume "lvl" created.
+[root@oracle ~]# lvs
+  LV   VG  Attr       LSize Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  lvl  vg1 -wi-a----- 3.00g
+[root@oracle ~]# lsblk
+NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda           8:0    0   30G  0 disk
+├─sda1        8:1    0  300M  0 part /boot
+├─sda2        8:2    0    2G  0 part [SWAP]
+├─sda3        8:3    0 17.7G  0 part /
+└─sda4        8:4    0   10G  0 part
+  └─vg1-lvl 253:0    0    3G  0 lvm
+sr0          11:0    1 1024M  0 rom
+[root@oracle ~]# vgs
+  VG  #PV #LV #SN Attr   VSize   VFree
+  vg1   1   1   0 wz--n- <10.00g <7.00g
+[root@oracle ~]# lvcreate -L 1G -n lv2 vg1
+  Logical volume "lv2" created.
+[root@oracle ~]# lsblk
+NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda           8:0    0   30G  0 disk
+├─sda1        8:1    0  300M  0 part /boot
+├─sda2        8:2    0    2G  0 part [SWAP]
+├─sda3        8:3    0 17.7G  0 part /
+└─sda4        8:4    0   10G  0 part
+  ├─vg1-lvl 253:0    0    3G  0 lvm
+  └─vg1-lv2 253:1    0    1G  0 lvm
+sr0          11:0    1 1024M  0 rom
+[root@oracle ~]# vgs
+  VG  #PV #LV #SN Attr   VSize   VFree
+  vg1   1   2   0 wz--n- <10.00g <6.00g
+[root@oracle ~]# lvreduce --hlp
+lvreduce: unrecognized option '--hlp'
+  Error during parsing of command line.
+[root@oracle ~]# lvreduce --help
+  lvreduce - Reduce the size of a logical volume
+
+  lvreduce -L|--size [-]Size[m|UNIT] LV
+        [ -l|--extents [-]Number[PERCENT] ]
+        [ -A|--autobackup y|n ]
+        [ -f|--force ]
+        [ -n|--nofsck ]
+        [ -r|--resizefs ]
+        [    --noudevsync ]
+        [    --reportformat basic|json ]
+        [ COMMON_OPTIONS ]
+
+  Common options for lvm:
+        [ -d|--debug ]
+        [ -h|--help ]
+        [ -q|--quiet ]
+        [ -v|--verbose ]
+        [ -y|--yes ]
+        [ -t|--test ]
+        [    --commandprofile String ]
+        [    --config String ]
+        [    --driverloaded y|n ]
+        [    --lockopt String ]
+        [    --longhelp ]
+        [    --profile String ]
+        [    --version ]
+[root@oracle ~]# lvreduce -L -1G /dev/vg1/lv
+/dev/vg1/lv2  /dev/vg1/lvl
+[root@oracle ~]# lvreduce -L -1G /dev/vg1/lv
+/dev/vg1/lv2  /dev/vg1/lvl
+[root@oracle ~]# vgs
+  VG  #PV #LV #SN Attr   VSize   VFree
+  vg1   1   2   0 wz--n- <10.00g <6.00g
+[root@oracle ~]# lvreduce -L -1G /dev/vg1/lv
+/dev/vg1/lv2  /dev/vg1/lvl
+[root@oracle ~]# lvreduce -L -500M /dev/vg1/lv2
+  WARNING: Reducing active logical volume to 524.00 MiB.
+  THIS MAY DESTROY YOUR DATA (filesystem etc.)
+Do you really want to reduce vg1/lv2? [y/n]: y
+  Size of logical volume vg1/lv2 changed from 1.00 GiB (256 extents) to 524.00 MiB (131 extents).
+  Logical volume vg1/lv2 successfully resized.
+[root@oracle ~]# vgs
+  VG  #PV #LV #SN Attr   VSize   VFree
+  vg1   1   2   0 wz--n- <10.00g 6.48g
+[root@oracle ~]# lvs
+  LV   VG  Attr       LSize   Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  lv2  vg1 -wi-a----- 524.00m
+  lvl  vg1 -wi-a-----   3.00g
+[root@oracle ~]# lvextend --help
+  lvextend - Add space to a logical volume
+
+  Extend an LV by a specified size.
+  lvextend -L|--size [+]Size[m|UNIT] LV
+        [ -l|--extents [+]Number[PERCENT] ]
+        [ -r|--resizefs ]
+        [ -i|--stripes Number ]
+        [ -I|--stripesize Size[k|UNIT] ]
+        [    --poolmetadatasize [+]Size[m|UNIT] ]
+        [ COMMON_OPTIONS ]
+        [ PV ... ]
+
+  Extend an LV by specified PV extents.
+  lvextend LV PV ...
+        [ -r|--resizefs ]
+        [ -i|--stripes Number ]
+        [ -I|--stripesize Size[k|UNIT] ]
+        [ COMMON_OPTIONS ]
+
+  Extend a pool metadata SubLV by a specified size.
+  lvextend --poolmetadatasize [+]Size[m|UNIT] LV_thinpool
+        [ -i|--stripes Number ]
+        [ -I|--stripesize Size[k|UNIT] ]
+        [ COMMON_OPTIONS ]
+        [ PV ... ]
+
+  Extend an LV according to a predefined policy.
+  lvextend --usepolicies LV_snapshot_thinpool
+        [ -r|--resizefs ]
+        [ COMMON_OPTIONS ]
+        [ PV ... ]
+
+  Common options for command:
+        [ -A|--autobackup y|n ]
+        [ -f|--force ]
+        [ -m|--mirrors Number ]
+        [ -n|--nofsck ]
+        [    --alloc contiguous|cling|cling_by_tags|normal|anywhere|inherit ]
+        [    --nosync ]
+        [    --noudevsync ]
+        [    --reportformat basic|json ]
+        [    --type linear|striped|snapshot|mirror|raid|thin|cache|thin-pool|cache-pool ]
+
+  Common options for lvm:
+        [ -d|--debug ]
+        [ -h|--help ]
+        [ -q|--quiet ]
+        [ -v|--verbose ]
+        [ -y|--yes ]
+        [ -t|--test ]
+        [    --commandprofile String ]
+        [    --config String ]
+        [    --driverloaded y|n ]
+        [    --lockopt String ]
+        [    --longhelp ]
+        [    --profile String ]
+        [    --version ]
+
+  Use --longhelp to show all options and advanced commands.
+
+[root@oracle ~]# lvextend -L +1G /dev/vg1/lv
+/dev/vg1/lv2  /dev/vg1/lvl
+[root@oracle ~]# lvextend -L +1G /dev/vg1/lv2
+  Size of logical volume vg1/lv2 changed from 524.00 MiB (131 extents) to 1.51 GiB (387 extents).
+  Logical volume vg1/lv2 successfully resized.
+[root@oracle ~]# lvs
+  LV   VG  Attr       LSize Pool Origin Data%  Meta%  Move Log Cpy%Sync Convert
+  lv2  vg1 -wi-a----- 1.51g
+  lvl  vg1 -wi-a----- 3.00g
+[root@oracle ~]# vgs
+  VG  #PV #LV #SN Attr   VSize   VFree
+  vg1   1   2   0 wz--n- <10.00g 5.48g
+[root@oracle ~]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda3        18G   18G  716K 100% /
+devtmpfs        3.8G     0  3.8G   0% /dev
+tmpfs           3.9G   12K  3.9G   1% /dev/shm
+tmpfs           3.9G   13M  3.8G   1% /run
+tmpfs           3.9G     0  3.9G   0% /sys/fs/cgroup
+/dev/sda1       297M  133M  165M  45% /boot
+tmpfs           781M   12K  781M   1% /run/user/1004
+tmpfs           781M   12K  781M   1% /run/user/42
+tmpfs           781M     0  781M   0% /run/user/0
+[root@oracle ~]# lvdisplay
+  --- Logical volume ---
+  LV Path                /dev/vg1/lvl
+  LV Name                lvl
+  VG Name                vg1
+  LV UUID                JXJ1Se-urUU-0Phr-LVxE-0BgM-yUg4-bFFSPm
+  LV Write Access        read/write
+  LV Creation host, time oracle.test.com, 2020-01-28 00:39:16 -0800
+  LV Status              available
+  # open                 0
+  LV Size                3.00 GiB
+  Current LE             768
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:0
+
+  --- Logical volume ---
+  LV Path                /dev/vg1/lv2
+  LV Name                lv2
+  VG Name                vg1
+  LV UUID                BggECS-XwD8-bSsI-xdP5-L1Ro-K0dW-nBaLa9
+  LV Write Access        read/write
+  LV Creation host, time oracle.test.com, 2020-01-28 00:40:08 -0800
+  LV Status              available
+  # open                 0
+  LV Size                1.51 GiB
+  Current LE             387
+  Segments               1
+  Allocation             inherit
+  Read ahead sectors     auto
+  - currently set to     8192
+  Block device           253:1
+
+[root@oracle ~]# mount -a
+[root@oracle ~]# lsblk
+NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda           8:0    0   30G  0 disk
+├─sda1        8:1    0  300M  0 part /boot
+├─sda2        8:2    0    2G  0 part [SWAP]
+├─sda3        8:3    0 17.7G  0 part /
+└─sda4        8:4    0   10G  0 part
+  ├─vg1-lvl 253:0    0    3G  0 lvm
+  └─vg1-lv2 253:1    0  1.5G  0 lvm
+sr0          11:0    1 1024M  0 rom
+[root@oracle ~]# df -h
+Filesystem      Size  Used Avail Use% Mounted on
+/dev/sda3        18G   18G  716K 100% /
+devtmpfs        3.8G     0  3.8G   0% /dev
+tmpfs           3.9G   12K  3.9G   1% /dev/shm
+tmpfs           3.9G   13M  3.8G   1% /run
+tmpfs           3.9G     0  3.9G   0% /sys/fs/cgroup
+/dev/sda1       297M  133M  165M  45% /boot
+tmpfs           781M   12K  781M   1% /run/user/1004
+tmpfs           781M   12K  781M   1% /run/user/42
+tmpfs           781M     0  781M   0% /run/user/0
+
+[root@oracle ~]# mkfs.ext4 /dev/s
+sda       sda1      sda2      sda3      sda4      sg0       sg1       shm/      snapshot  snd/      sr0       stderr    stdin     stdout
+[root@oracle ~]# mkfs.ext4 /dev/sda4
+mke2fs 1.42.9 (28-Dec-2013)
+/dev/sda4 is apparently in use by the system; will not make a filesystem here!
+[root@oracle ~]# mkfs.ext4 /dev/vg1/lv
+lv2  lvl
+[root@oracle ~]# mkfs.ext4 /dev/vg1/lv2
+mke2fs 1.42.9 (28-Dec-2013)
+Discarding device blocks: done
+Filesystem label=
+OS type: Linux
+Block size=4096 (log=2)
+Fragment size=4096 (log=2)
+Stride=0 blocks, Stripe width=0 blocks
+99216 inodes, 396288 blocks
+19814 blocks (5.00%) reserved for the super user
+First data block=0
+Maximum filesystem blocks=406847488
+13 block groups
+32768 blocks per group, 32768 fragments per group
+7632 inodes per group
+Superblock backups stored on blocks:
+        32768, 98304, 163840, 229376, 294912
+
+Allocating group tables: done
+Writing inode tables: done
+Creating journal (8192 blocks): done
+Writing superblocks and filesystem accounting information: done
+
+The device apparently does not exist; did you specify it correctly?
+[root@oracle ~]# mkfs.ext4 /dev/vg1/lv
+lv2  lvl
+[root@oracle ~]# mkfs.ext4 /dev/vg1/lvl
+mke2fs 1.42.9 (28-Dec-2013)
+Discarding device blocks: done
+Filesystem label=
+OS type: Linux
+Block size=4096 (log=2)
+Fragment size=4096 (log=2)
+Stride=0 blocks, Stripe width=0 blocks
+196608 inodes, 786432 blocks
+39321 blocks (5.00%) reserved for the super user
+First data block=0
+Maximum filesystem blocks=805306368
+24 block groups
+32768 blocks per group, 32768 fragments per group
+8192 inodes per group
+Superblock backups stored on blocks:
+        32768, 98304, 163840, 229376, 294912
+
+Allocating group tables: done
+Writing inode tables: done
+Creating journal (16384 blocks): done
+Writing superblocks and filesystem accounting information: done
+
+[root@oracle ~]# mkdir /mnt/{mount1,mount2}
+[root@oracle ~]# ll /mnt
+total 0
+drwxr-xr-x. 2 root root 6 Jan 28 01:10 mount1
+drwxr-xr-x. 2 root root 6 Jan 28 01:10 mount2
+[root@oracle ~]# vim /etc/fstab
+[root@oracle mount2]# cat /etc/fstab
+#
+# /etc/fstab
+# Created by anaconda on Mon Oct 14 00:31:48 2019
+#
+# Accessible filesystems, by reference, are maintained under '/dev/disk'
+# See man pages fstab(5), findfs(8), mount(8) and/or blkid(8) for more info
+#
+UUID=07c32ae1-fe5c-4d0c-9342-34606c5069f2 /                       xfs     defaults        0 0
+UUID=b4dd70eb-04c1-4f29-8d70-e82dd3540d53 /boot                   xfs     defaults        0 0
+UUID=c11274f5-b135-4b07-a1a1-75ba984283e6 swap                    swap    defaults        0 0
+/dev/vg1/lvl    /mnt/mount1     ext4    defaults        0       0
+
+[root@oracle ~]# mount /dev/vg1/lv2 /mnt/mount2
+[root@oracle ~]# mount -a
+[root@oracle ~]# df -h
+Filesystem           Size  Used Avail Use% Mounted on
+/dev/sda3             18G   18G  688K 100% /
+devtmpfs             3.8G     0  3.8G   0% /dev
+tmpfs                3.9G   12K  3.9G   1% /dev/shm
+tmpfs                3.9G   13M  3.8G   1% /run
+tmpfs                3.9G     0  3.9G   0% /sys/fs/cgroup
+/dev/sda1            297M  133M  165M  45% /boot
+tmpfs                781M   12K  781M   1% /run/user/1004
+tmpfs                781M   12K  781M   1% /run/user/42
+tmpfs                781M     0  781M   0% /run/user/0
+/dev/mapper/vg1-lv2  1.5G  4.6M  1.4G   1% /mnt/mount2
+/dev/mapper/vg1-lvl  2.9G  9.0M  2.8G   1% /mnt/mount1
+[root@oracle ~]# cd /mnt/mount2/
+[root@oracle mount2]# ls
+lost+found
+[root@oracle mount2]# touch hello
+[root@oracle mount2]# ls
+hello  lost+found
+[root@oracle mount2]# lsblk
+NAME        MAJ:MIN RM  SIZE RO TYPE MOUNTPOINT
+sda           8:0    0   30G  0 disk
+├─sda1        8:1    0  300M  0 part /boot
+├─sda2        8:2    0    2G  0 part [SWAP]
+├─sda3        8:3    0 17.7G  0 part /
+└─sda4        8:4    0   10G  0 part
+  ├─vg1-lvl 253:0    0    3G  0 lvm  /mnt/mount1
+  └─vg1-lv2 253:1    0  1.5G  0 lvm  /mnt/mount2
+sr0          11:0    1 1024M  0 rom
+[root@oracle mount2]# vgdisplay
+  --- Volume group ---
+  VG Name               vg1
+  System ID
+  Format                lvm2
+  Metadata Areas        1
+  Metadata Sequence No  5
+  VG Access             read/write
+  VG Status             resizable
+  MAX LV                0
+  Cur LV                2
+  Open LV               2
+  Max PV                0
+  Cur PV                1
+  Act PV                1
+  VG Size               <10.00 GiB
+  PE Size               4.00 MiB
+  Total PE              2559
+  Alloc PE / Size       1155 / 4.51 GiB
+  Free  PE / Size       1404 / 5.48 GiB
+  VG UUID               dZ7xEe-doTj-5W3g-9XHa-6Ywm-kpNT-jFvdF2
+
+[root@oracle mount2]#

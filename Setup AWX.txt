@@ -1,0 +1,280 @@
+https://www.youtube.com/watch?v=eCg3YffSMUg
+
+login as: root
+root@172.17.5.162's password:
+Last login: Sat Oct 19 20:33:28 2019 from 172.17.5.1
+[root@redhat7 ~]# systemctl status firewalld
+● firewalld.service - firewalld - dynamic firewall daemon
+   Loaded: loaded (/usr/lib/systemd/system/firewalld.service; enabled; vendor preset: enabled)
+   Active: active (running) since Sat 2019-10-19 20:38:15 PDT; 26min ago
+     Docs: man:firewalld(1)
+ Main PID: 9028 (firewalld)
+   CGroup: /system.slice/firewalld.service
+           └─9028 /usr/bin/python2 -Es /usr/sbin/firewalld --nofork --nopid
+
+Oct 19 20:38:14 redhat7 systemd[1]: Starting firewalld - dynamic firewall daemon...
+Oct 19 20:38:15 redhat7 systemd[1]: Started firewalld - dynamic firewall daemon.
+[root@redhat7 ~]# systemctl stop firewalld
+[root@redhat7 ~]# systemctl disable firewalld
+Removed symlink /etc/systemd/system/multi-user.target.wants/firewalld.service.
+Removed symlink /etc/systemd/system/dbus-org.fedoraproject.FirewallD1.service.
+[root@redhat7 ~]# sestatus
+SELinux status:                 enabled
+SELinuxfs mount:                /sys/fs/selinux
+SELinux root directory:         /etc/selinux
+Loaded policy name:             targeted
+Current mode:                   enforcing
+Mode from config file:          enforcing
+Policy MLS status:              enabled
+Policy deny_unknown status:     allowed
+Max kernel policy version:      31
+[root@redhat7 ~]# vi /etc/selinux/config
+SELINUX=disabled
+
+---------------
+reboot
+---------------
+[root@redhat7 ~]# reboot
+test:
+[root@redhat7 ~]# getenforce
+Disabled
+[root@redhat7 ~]# sestatus
+SELinux status:                 disabled
+
+-----------
+check repos
+-----------
+[root@redhat7 ~]# yum repolist
+Loaded plugins: langpacks, product-id, search-disabled-repos, subscription-manager
+repo id                                                                                            repo name                                                                                                                           status
+epel/x86_64                                                                                        Extra Packages for Enterprise Linux 7 - x86_64                                                                                      13,411
+remi-php70                                                                                         Remi's PHP 7.0 RPM repository for Enterprise Linux 7 - x86_64                                                                          418
+remi-php71                                                                                         Remi's PHP 7.1 RPM repository for Enterprise Linux 7 - x86_64                                                                          427
+remi-safe                                                                                          Safe Remi's RPM repository for Enterprise Linux 7 - x86_64                                                                           3,616
+rhel-7-server-ansible-2.8-rpms/x86_64                                                              Red Hat Ansible Engine 2.8 RPMs for Red Hat Enterprise Linux 7 Server                                                                   10
+rhel-7-server-rpms/7Server/x86_64                                                                  Red Hat Enterprise Linux 7 Server (RPMs)                                                                                            26,497
+repolist: 44,379
+
+[root@redhat7 ~]# yum install epel-release
+Loaded plugins: langpacks, product-id, search-disabled-repos, subscription-manager
+Package epel-release-7-12.noarch already installed and latest version
+Nothing to do
+
+------------------
+Install packages {git gettext ansible docker nodejs npm gcc-c++ bzip2 ptyhon-docker-py}:
+------------------
+[root@redhat7 ~]# yum -y install git gettext ansible docker nodejs npm gcc-c++ bzip2 python-docker-py
+Loaded plugins: langpacks, product-id, search-disabled-repos, subscription-manager
+Package git-1.8.3.1-20.el7.x86_64 already installed and latest version
+Package gettext-0.19.8.1-2.el7.x86_64 already installed and latest version
+Package ansible-2.8.5-2.el7ae.noarch already installed and latest version
+No package docker available.
+Package bzip2-1.0.6-13.el7.x86_64 already installed and latest version
+No package python-docker-py available.
+
+Issue & solution: No docker package
+yum-config-manager --enable rhui-REGION-rhel-server-extras
+vi /etc/yum.repos.d/epel.repo
+[epel]
+enabled=1
+
+--------------------------
+Register you subscription
+--------------------------
+[root@redhat7 ~]# subscription-manager --force register
+Unregistering from: subscription.rhsm.redhat.com:443/subscription
+The system with UUID 46de0fc5-de01-4a6c-80f5-55aa4c9fabd0 has been unregistered
+All local data removed
+Registering to: subscription.rhsm.redhat.com:443/subscription
+Username: psymon9
+Password:
+The system has been registered with ID: ee40e153-016a-405c-bea3-b8bc5540d91c
+The registered system name is: redhat7
+[root@redhat7 ~]# subscription-manager attach --pool=8a85f99c6d889886016dc889d0b47465
+Successfully attached a subscription for: Red Hat Developer Subscription
+
+------------------------
+Try Install docker again
+------------------------
+[root@redhat7 ~]# yum install docker
+Loaded plugins: langpacks, product-id, search-disabled-repos, subscription-manager
+rhel-7-server-rpms                                                                                                                                                                                                    | 3.5 kB  00:00:00
+No package docker available.
+
+------------------------
+Subcribe to more repos: https://access.redhat.com/documentation/en-us/red_hat_enterprise_linux_atomic_host/7/html-single/getting_started_with_containers/index#get_started_with_docker_formatted_container_images
+-----------------------
+[root@redhat7 ~]# subscription-manager repos --enable=rhel-7-server-rpms
+Repository 'rhel-7-server-rpms' is enabled for this system.
+[root@redhat7 ~]# subscription-manager repos --enable=rhel-7-server-extras-rpms
+Repository 'rhel-7-server-extras-rpms' is enabled for this system.
+[root@redhat7 ~]# subscription-manager repos --enable=rhel-7-server-optional-rpms  (these one has exception)
+
+-----------------------
+before add repo extra:
+----------------------
+[root@redhat7 ~]# yum repolist
+Loaded plugins: langpacks, product-id, search-disabled-repos, subscription-manager
+repo id                                                                                            repo name                                                                                                                           status
+epel/x86_64                                                                                        Extra Packages for Enterprise Linux 7 - x86_64                                                                                      13,411
+remi-php70                                                                                         Remi's PHP 7.0 RPM repository for Enterprise Linux 7 - x86_64                                                                          418
+remi-php71                                                                                         Remi's PHP 7.1 RPM repository for Enterprise Linux 7 - x86_64                                                                          427
+remi-safe                                                                                          Safe Remi's RPM repository for Enterprise Linux 7 - x86_64                                                                           3,616
+rhel-7-server-ansible-2.8-rpms/x86_64                                                              Red Hat Ansible Engine 2.8 RPMs for Red Hat Enterprise Linux 7 Server                                                                   10
+rhel-7-server-rpms/7Server/x86_64                                                                  Red Hat Enterprise Linux 7 Server (RPMs)                                                                                            26,497
+repolist: 44,379
+
+-------------------------
+after added repo-extra:
+------------------------
+[root@redhat7 tasks]# yum repolist
+Loaded plugins: langpacks, product-id, search-disabled-repos, subscription-manager
+repo id                                                                                              repo name                                                                                                                         status
+epel/x86_64                                                                                          Extra Packages for Enterprise Linux 7 - x86_64                                                                                    13,411
+remi-php70                                                                                           Remi's PHP 7.0 RPM repository for Enterprise Linux 7 - x86_64                                                                        418
+remi-php71                                                                                           Remi's PHP 7.1 RPM repository for Enterprise Linux 7 - x86_64                                                                        427
+remi-safe                                                                                            Safe Remi's RPM repository for Enterprise Linux 7 - x86_64                                                                         3,616
+rhel-7-server-rpms/7Server/x86_64                                                                    Red Hat Enterprise Linux 7 Server (RPMs)                                                                                          26,497
+repolist: 44,369
+
+-------------------------
+Try install docker gain
+-------------------------
+[root@redhat7 ~]# yum install docker
+Loaded plugins: langpacks, product-id, search-disabled-repos, subscription-manager
+rhel-7-server-extras-rpms                                                                                                                                                                                             | 3.4 kB  00:00:00
+rhel-7-server-rpms                                                                                                                                                                                                    | 3.5 kB  00:00:00
+(1/3): rhel-7-server-extras-rpms/x86_64/group                                                                                                                                                                         |  124 B  00:00:00
+(2/3): rhel-7-server-extras-rpms/x86_64/updateinfo                                                                                                                                                                    | 212 kB  00:00:02
+(3/3): rhel-7-server-extras-rpms/x86_64/primary_db  
+[root@redhat7 ~]# yum install python-docker-py
+[root@redhat7 ~]# git clone https://github.com/ansible/awx.git
+[root@redhat7 ~]# cd awx/installer/
+[root@redhat7 installer]# ls
+build.yml  install.yml  inventory  roles
+[root@redhat7 installer]# ansible-playbook -i inventory install.yml
+
+-------------------------
+issue: docker-compose
+-------------------------
+TASK [local_docker : Start the containers] **************************************************************************************************************************************************************************************************
+[DEPRECATION WARNING]: The 'docker_service' module has been renamed to 'docker_compose'.. This feature will be removed in version 2.12. Deprecation warnings can be disabled by setting deprecation_warnings=False in ansible.cfg.
+fatal: [localhost]: FAILED! => {"changed": false, "msg": "Unable to load docker-compose. Try `pip install docker-compose`. Error: Traceback (most recent call last):\n  File \"/tmp/ansible_docker_service_payload_c4xtc1/__main__.py\", line 475, in <module>\n    from compose import __version__ as compose_version\nImportError: No module named compose\n"}
+
+PLAY RECAP **********************************************************************************************************************************************************************************************************************************
+localhost                  : ok=11   changed=0    unreachable=0    failed=1    skipped=83   rescued=0    ignored=0
+
+-------------------------------
+Troubleshooting docker-compse:
+-------------------------------
+systemctl start docker
+yum install docker-compose
+issue: unable to run docker compose on ansible playbook
+[root@redhat7 installer]# yum remove docker python-docker-py docker-compose 
+[root@redhat7 installer]# yum install docker-compose
+[root@redhat7 installer]# yum install docker python-docker-py
+
+port 80 is being used by other services:
+[root@redhat7 awxcompose]# netstat -anpo | grep 80
+tcp6       0      0 :::80                   :::*                    LISTEN      1070/httpd           off (0.00/0/0)
+
+-------------------------
+ignore this step!!! don't change it here, change it via the playbook!!!
+-------------------------
+cd /root/.awx/awxcompose
+[root@redhat7 awxcompose]# ls
+credentials.py  docker-compose.yml  environment.sh  SECRET_KEY
+[root@redhat7 awxcompose]# vi docker-compose.yml   (changed port 80 to 8090)
+--------------------------
+
+--------------------------
+ignore this step!!! - this is not a permanent solution
+--------------------------
+[root@redhat7 roles]# systemctl stop httpd
+[root@redhat7 roles]# systemctl stop apache
+[root@redhat7 roles]# netstat -anpo | grep 80
+tcp        0      0 172.17.5.162:60720      172.17.5.130:389        ESTABLISHED 809/sssd_be          keepalive (7131.82/0/0)
+udp        0      0 0.0.0.0:942             0.0.0.0:*                           780/rpcbind          off (0.00/0/0)
+udp6       0      0 :::942                  :::*              
+{no port 80 is running!!)
+----------------------------
+change port 80 to 8090:
+[root@redhat7 installer]# less inventory|grep 8090
+host_port=8090
+
+-------------------------------
+Test docker-compose again
+-------------------------------
+[root@redhat7 installer]# ansible-playbook -i inventory install.yml
+same issue...
+
+--------------------------------------------------
+install all required dockers from compose.yml file:
+--------------------------------------------------
+now try to this, it download all the dockers stuffs:
+cd /root/.awx/awxcompose
+[root@redhat7 awxcompose]# ls -ltr
+total 16
+-rw------- 1 root root  278 Oct 19 21:53 environment.sh
+-rw------- 1 root root  817 Oct 19 21:53 credentials.py
+-rw------- 1 root root    9 Oct 19 21:53 SECRET_KEY
+-rw------- 1 root root 1963 Oct 19 23:01 docker-compose.yml
+[root@redhat7 awxcompose]# docker-compose up -d
+
+
+-------------------------
+Fixed issue: docker-compose (see above); temp solution is to remove the Start the container task, run it manually cd /root/.awx/awxcompose; docker-compose up -d
+-------------------------
+[root@redhat7 tasks]# diff compose.yml compose.yml.bak
+24a25,30
+> - name: Start the containers
+>   docker_service:
+>     project_src: "{{ docker_compose_dir }}"
+>     restarted: "{{ awx_compose_config is changed or awx_secret_key is changed }}"
+>   register: awx_compose_start
+>
+27c33
+<   when: awx_compose_config.changed
+---
+>   when: awx_compose_config.changed or awx_compose_start.changed
+31c37
+<   when: awx_compose_config.changed
+---
+>   when: awx_compose_config.changed or awx_compose_start.changed
+
+
+[root@redhat7 tasks]# ip a
+2: ens33: <BROADCAST,MULTICAST,UP,LOWER_UP> mtu 1500 qdisc pfifo_fast state UP group default qlen 1000
+    link/ether 00:0c:29:b7:77:71 brd ff:ff:ff:ff:ff:ff
+    inet 172.17.5.162/24 brd 172.17.5.255 scope global noprefixroute dynamic ens33
+       valid_lft 680414sec preferred_lft 680414sec
+    inet6 fe80::70d3:e4e1:66f4:6576/64 scope link noprefixroute
+       valid_lft forever preferred_lft forever
+
+Test:
+http://172.17.5.162:8090
+admin; password
+
+
+
+[root@redhat7 installer]# docker ps
+CONTAINER ID        IMAGE                        COMMAND                  CREATED              STATUS              PORTS                                                 NAMES
+327003803c58        ansible/awx_task:7.0.0       "/tini -- /bin/sh ..."   About a minute ago   Up About a minute   8052/tcp                                              awx_task
+80c31344a989        ansible/awx_web:7.0.0        "/tini -- /bin/sh ..."   About a minute ago   Up About a minute   0.0.0.0:80->8052/tcp                                  awx_web
+4bc326577f16        postgres:10                  "docker-entrypoint..."   About a minute ago   Up About a minute   5432/tcp                                              awx_postgres
+a5158346422f        ansible/awx_rabbitmq:3.7.4   "docker-entrypoint..."   About a minute ago   Up About a minute   4369/tcp, 5671-5672/tcp, 15671-15672/tcp, 25672/tcp   awx_rabbitmq
+86dce41d63a1        memcached:alpine             "docker-entrypoint..."   About a minute ago   Up About a minute   11211/tcp                                             awx_memcached
+
+[root@redhat7 installer]# docker images
+REPOSITORY                       TAG                 IMAGE ID            CREATED             SIZE
+docker.io/postgres               10                  9a05a2b9e69f        3 days ago          211 MB
+docker.io/memcached              alpine              a8e8ad094ec0        2 weeks ago         9.11 MB
+docker.io/ansible/awx_task       7.0.0               dc5983bbaf55        6 weeks ago         1.68 GB
+docker.io/ansible/awx_web        7.0.0               6a942a0c5461        6 weeks ago         1.65 GB
+docker.io/ansible/awx_rabbitmq   3.7.4               e08fe791079e        19 months ago       85.6 MB
+[root@redhat7 installer]# watch docker images
+[root@redhat7 installer]# watch -nl docker images
+
+
+
+

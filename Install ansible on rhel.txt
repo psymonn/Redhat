@@ -1,0 +1,185 @@
+Account: psymon9
+
+Install anisble tower on rhel7:
+Pre-requesite:
+already register with rhel online - subscription-manager --force register
+subscription-manager list --available -> Pool ID:             8a85f99c6d889886016dc889d0b47465
+subscription-manager attach --pool=8a85f99c6d889886016dc889d0b47465
+yum update -y
+
+[root@redhat7 ~]# subscription-manager repos --list-enabled
++----------------------------------------------------------+
+    Available Repositories in /etc/yum.repos.d/redhat.repo
++----------------------------------------------------------+
+Repo ID:   rhel-7-server-rpms
+Repo Name: Red Hat Enterprise Linux 7 Server (RPMs)
+Repo URL:  https://cdn.redhat.com/content/dist/rhel/server/7/$releasever/$basearch/os
+Enabled:   1
+
+[root@redhat7 ~]# subscription-manager repos --list |grep ansible
+Repo ID:   rhel-7-server-ansible-2.6-rpms
+Repo URL:  https://cdn.redhat.com/content/dist/rhel/server/7/7Server/$basearch/ansible/2.6/os
+Repo ID:   rhel-7-server-ansible-2-source-rpms
+Repo URL:  https://cdn.redhat.com/content/dist/rhel/server/7/7Server/$basearch/ansible/2/source/SRPMS
+Repo ID:   rhel-7-server-ansible-2-rpms
+Repo URL:  https://cdn.redhat.com/content/dist/rhel/server/7/7Server/$basearch/ansible/2/os
+Repo ID:   rhel-7-server-ansible-2.8-rpms
+Repo URL:  https://cdn.redhat.com/content/dist/rhel/server/7/7Server/$basearch/ansible/2.8/os
+Repo ID:   rhel-7-server-ansible-2.6-source-rpms
+Repo URL:  https://cdn.redhat.com/content/dist/rhel/server/7/7Server/$basearch/ansible/2.6/source/SRPMS
+Repo ID:   rhel-7-server-ansible-2.7-source-rpms
+Repo URL:  https://cdn.redhat.com/content/dist/rhel/server/7/7Server/$basearch/ansible/2.7/source/SRPMS
+Repo ID:   rhel-7-server-ansible-2.5-source-rpms
+Repo URL:  https://cdn.redhat.com/content/dist/rhel/server/7/7Server/$basearch/ansible/2.5/source/SRPMS
+Repo ID:   rhel-7-server-ansible-2.7-rpms
+Repo URL:  https://cdn.redhat.com/content/dist/rhel/server/7/7Server/$basearch/ansible/2.7/os
+Repo ID:   rhel-7-server-ansible-2.4-rpms
+Repo URL:  https://cdn.redhat.com/content/dist/rhel/server/7/7Server/$basearch/ansible/2.4/os
+Repo ID:   rhel-7-server-ansible-2.8-debug-rpms
+Repo URL:  https://cdn.redhat.com/content/dist/rhel/server/7/7Server/$basearch/ansible/2.8/debug
+Repo ID:   rhel-7-server-ansible-2.5-rpms
+Repo URL:  https://cdn.redhat.com/content/dist/rhel/server/7/7Server/$basearch/ansible/2.5/os
+Repo ID:   rhel-7-server-ansible-2-debug-rpms
+Repo URL:  https://cdn.redhat.com/content/dist/rhel/server/7/7Server/$basearch/ansible/2/debug
+Repo ID:   rhel-7-server-ansible-2.7-debug-rpms
+Repo URL:  https://cdn.redhat.com/content/dist/rhel/server/7/7Server/$basearch/ansible/2.7/debug
+Repo ID:   rhel-7-server-ansible-2.4-source-rpms
+Repo URL:  https://cdn.redhat.com/content/dist/rhel/server/7/7Server/$basearch/ansible/2.4/source/SRPMS
+Repo ID:   rhel-7-server-ansible-2.4-debug-rpms
+Repo URL:  https://cdn.redhat.com/content/dist/rhel/server/7/7Server/$basearch/ansible/2.4/debug
+Repo ID:   rhel-7-server-ansible-2.5-debug-rpms
+Repo URL:  https://cdn.redhat.com/content/dist/rhel/server/7/7Server/$basearch/ansible/2.5/debug
+Repo ID:   rhel-7-server-ansible-2.6-debug-rpms
+Repo URL:  https://cdn.redhat.com/content/dist/rhel/server/7/7Server/$basearch/ansible/2.6/debug
+Repo ID:   rhel-7-server-ansible-2.8-source-rpms
+Repo URL:  https://cdn.redhat.com/content/dist/rhel/server/7/7Server/$basearch/ansible/2.8/source/SRPMS
+
+
+[root@redhat7 ~]# subscription-manager repos --enable rhel-7-server-ansible-2.8-rpms
+Repository 'rhel-7-server-ansible-2.8-rpms' is enabled for this system.
+
+yum install ansible -y
+ ansible --version
+
+[root@redhat7 ~]# ansible -m ping localhost
+localhost | SUCCESS => {
+    "changed": false,
+    "ping": "pong"
+}
+
+installation guid: https://docs.ansible.com/ansible-tower/latest/html/quickinstall/index.html
+
+Goto https://www.ansible.com/ and top right corner choos trial and follow the instruction.
+check email and download the gz file and tranfer to /opt/ansible
+mkdir /opt/ansible
+tar xvzf ansible-tower-setup-latest.tar.gz
+[root@redhat7 ansible]# cd ansible-tower-setup-3.5.3-1/
+[root@redhat7 ansible-tower-setup-3.5.3-1]# ls
+backup.yml  group_vars  install.yml  inventory  licenses  README.md  restore.yml  roles  setup.sh
+[root@redhat7 ansible-tower-setup-3.5.3-1]# cp inventory inventory_bak
+[root@redhat7 ansible-tower-setup-3.5.3-1]# vi inventory       (password Test01)
+./setup.sh
+
+issue: setup again (turn off firewalld):
+[root@redhat7 ansible-tower-setup-3.5.3-1]# less /var/log/tower/setup-2019-10-14-04:27:09.log
+[root@redhat7 ansible-tower-setup-3.5.3-1]# systemctl status iptables
+Unit iptables.service could not be found.
+[root@redhat7 ansible-tower-setup-3.5.3-1]# systemctl status firewalld
+● firewalld.service - firewalld - dynamic firewall daemon
+   Loaded: loaded (/usr/lib/systemd/system/firewalld.service; enabled; vendor preset: enabled)
+   Active: active (running) since Mon 2019-10-14 04:25:34 PDT; 24min ago
+     Docs: man:firewalld(1)
+ Main PID: 859 (firewalld)
+   CGroup: /system.slice/firewalld.service
+           └─859 /usr/bin/python2 -Es /usr/sbin/firewalld --nofork --nopid
+
+Oct 14 04:25:33 redhat7 systemd[1]: Starting firewalld - dynamic firewall daemon...
+Oct 14 04:25:34 redhat7 systemd[1]: Started firewalld - dynamic firewall daemon.
+[root@redhat7 ansible-tower-setup-3.5.3-1]# systemctl stop firewalld
+[root@redhat7 ansible-tower-setup-3.5.3-1]# ./setup.sh
+
+same issue, but solution (update to port 8080):
+TASK [nginx : start nginx and configure to startup automatically] ***************************************************************************************************************************************************************************************
+fatal: [localhost]: FAILED! => {"changed": false, "msg": "Unable to start service nginx: Job for nginx.service failed because the control process exited with error code. See \"systemctl status nginx.service\" and \"journalctl -xe\" for details.\n"}
+
+PLAY RECAP **********************************************************************************************************************************************************************************************************************************************
+localhost                  : ok=132  changed=21   unreachable=0    failed=1    skipped=63   rescued=0    ignored=0
+
+
+[root@redhat7 nginx]# diff nginx.conf nginx.conf.bak
+40c40
+<         listen 127.0.0.1:8080 default_server;
+---
+>         listen 127.0.0.1:80 default_server;
+42c42
+<         listen [::1]:8080 default_server;
+---
+>         listen [::1]:80 default_server;
+114,115c114,115
+<         listen 8080 default_server;
+<         listen [::]:8080 default_server;
+---
+>         listen 80 default_server;
+>         listen [::]:80 default_server;
+
+
+[root@redhat7 conf.d]# systemctl status ngnix.service
+Unit ngnix.service could not be found.
+[root@redhat7 conf.d]# systemctl status ngnix.services
+Unit ngnix.services.service could not be found.
+[root@redhat7 conf.d]# systemctl status nginx.service
+● nginx.service - The nginx HTTP and reverse proxy server
+   Loaded: loaded (/usr/lib/systemd/system/nginx.service; enabled; vendor preset: disabled)
+   Active: active (running) since Mon 2019-10-14 05:23:01 PDT; 5min ago
+  Process: 24370 ExecStart=/usr/sbin/nginx (code=exited, status=0/SUCCESS)
+  Process: 24366 ExecStartPre=/usr/sbin/nginx -t (code=exited, status=0/SUCCESS)
+  Process: 24364 ExecStartPre=/usr/bin/rm -f /run/nginx.pid (code=exited, status=0/SUCCESS)
+ Main PID: 24372 (nginx)
+   CGroup: /system.slice/nginx.service
+           ├─24372 nginx: master process /usr/sbin/nginx
+           ├─24373 nginx: worker process
+           ├─24374 nginx: worker process
+           ├─24375 nginx: worker process
+           └─24376 nginx: worker process
+
+Oct 14 05:23:01 redhat7 systemd[1]: Starting The nginx HTTP and reverse proxy server...
+Oct 14 05:23:01 redhat7 nginx[24366]: nginx: the configuration file /etc/nginx/nginx.conf syntax is ok
+Oct 14 05:23:01 redhat7 nginx[24366]: nginx: configuration file /etc/nginx/nginx.conf test is successful
+Oct 14 05:23:01 redhat7 systemd[1]: Started The nginx HTTP and reverse proxy server.
+
+Restart setup again:
+[root@redhat7 ansible-tower-setup-3.5.3-1]# ./setup.sh
+
+try again:
+[root@redhat7 defaults]# diff main.yml.bak main.yml
+5c5
+< nginx_http_port: "{{ http_port|default(80) }}"
+---
+> nginx_http_port: "{{ http_port|default(8080) }}"
+[root@redhat7 defaults]# pwd
+/opt/ansible/ansible-tower-setup-3.5.3-1/roles/nginx/defaults
+
+[root@redhat7 ansible-tower-setup-3.5.3-1]# ./setup.sh
+works!!
+
+login:
+https://172.17.5.188/#/login
+user: admin
+passwd: Test01
+
+Click request for activation
+
+Activation:
+
+Free RED HAT Ansible Tower Trial - Enterprise Features
+
+A trial for enterprise IT operations of 50 nodes.
+
+Standard and Premium Ansible Tower editions include powerful, enterprise features not available in the self-support edition.
+
+Thank you. We will review your request and get back to you soon. 
+
+Check email:
+
+
+
